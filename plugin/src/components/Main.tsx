@@ -11,24 +11,28 @@ const MainContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 `
 
 export const Main = (): JSX.Element => {
   const [togglePressed, setTogglePressed] = useState(false)
 
   return (
-    <Theme.Provider theme={togglePressed ? 'dark' : 'default'}>
+    <Theme.Provider
+      theme={togglePressed ? 'dark' : 'default'}
+      css='width: 100%'
+    >
+      <Button
+        variant='secondary'
+        onClick={() => setTogglePressed(!togglePressed)}
+      >
+        {togglePressed ? (
+          <DarkModeIcon decorative />
+        ) : (
+          <LightModeIcon decorative />
+        )}
+      </Button>
       <MainContainer>
-        <Button
-          variant='secondary'
-          onClick={() => setTogglePressed(!togglePressed)}
-        >
-          {togglePressed ? (
-            <DarkModeIcon decorative />
-          ) : (
-            <LightModeIcon decorative />
-          )}
-        </Button>
         <ButtonCreateWorker />
       </MainContainer>
     </Theme.Provider>

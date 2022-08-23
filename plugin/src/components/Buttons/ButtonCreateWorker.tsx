@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import {
   Button,
+  Input,
   Label,
   Modal,
   ModalBody,
@@ -10,13 +11,18 @@ import {
   ModalHeading,
   Option,
   Paragraph,
-  Select
+  Select,
+  TextArea
 } from '@twilio-paste/core'
 
 export const ButtonCreateWorker = (): JSX.Element => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [workerName, setWorkerName] = useState<string>('')
+  const [attributes, setAttirbutes] = useState<string>('')
+
   const handleOpen = () => setIsOpen(true)
   const handleClose = () => setIsOpen(false)
+
   const modalHeadingID = 'modal-heading'
 
   return (
@@ -24,7 +30,7 @@ export const ButtonCreateWorker = (): JSX.Element => {
       <Button variant='primary' onClick={handleOpen}>
         + Create Worker
       </Button>
-      {/* <Modal
+      <Modal
         ariaLabelledby={modalHeadingID}
         isOpen={isOpen}
         onDismiss={handleClose}
@@ -32,17 +38,20 @@ export const ButtonCreateWorker = (): JSX.Element => {
       >
         <ModalHeader>
           <ModalHeading as='h3' id={modalHeadingID}>
-            Choose an author
+            Create Worker
           </ModalHeading>
         </ModalHeader>
         <ModalBody>
-          <Paragraph>
-            “If there’s a book that you want to read, but it hasn’t been written
-            yet, then you must write it.” — Toni Morrison
-          </Paragraph>
-
-          <Label htmlFor='author'>Choose an author</Label>
-          <Select id='author'>
+          <Label htmlFor='input-id'>Worker Name</Label>
+          <Input
+            id='input-id'
+            value={workerName}
+            onChange={e => setWorkerName(e.target.value)}
+            type='text'
+          />
+          <br />
+          <Label htmlFor='activity'>Activity</Label>
+          <Select id='activity'>
             <Option value='baldwin'>James Baldwin</Option>
             <Option value='brown'>adrienne maree brown</Option>
             <Option value='butler'>Octavia Butler</Option>
@@ -50,16 +59,23 @@ export const ButtonCreateWorker = (): JSX.Element => {
             <Option value='lorde'>Audre Lorde</Option>
             <Option value='nnedi'>Nnedi Okorafor</Option>
           </Select>
+          <br />
+          <Label htmlFor='attributes'>Attributes</Label>
+          <TextArea
+            id='attributes'
+            name='attributes'
+            onChange={e => setAttirbutes(e.target.value)}
+          />
         </ModalBody>
         <ModalFooter>
           <ModalFooterActions>
             <Button variant='secondary' onClick={handleClose}>
               Cancel
             </Button>
-            <Button variant='primary'>Done</Button>
+            <Button variant='primary'>Submit</Button>
           </ModalFooterActions>
         </ModalFooter>
-      </Modal> */}
+      </Modal>
     </>
   )
 }
