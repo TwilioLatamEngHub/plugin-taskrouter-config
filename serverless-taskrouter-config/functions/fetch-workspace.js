@@ -23,6 +23,6 @@ exports.handler = async function (context, event, callback) {
     .then(() => callback(null, response))
     .catch(error => {
       console.log(error)
-      callback(error)
+      return callback(error)
     })
 }
