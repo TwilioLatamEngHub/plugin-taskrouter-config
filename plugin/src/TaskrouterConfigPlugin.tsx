@@ -1,6 +1,7 @@
 import React from 'react'
 import * as Flex from '@twilio/flex-ui'
 import { FlexPlugin } from '@twilio/flex-plugin'
+import { ButtonConfig, Main } from './components'
 
 const PLUGIN_NAME = 'TaskrouterConfigPlugin'
 
@@ -15,5 +16,13 @@ export default class TaskrouterConfigPlugin extends FlexPlugin {
    *
    * @param flex { typeof Flex }
    */
-  async init(flex: typeof Flex, manager: Flex.Manager): Promise<void> {}
+  async init(flex: typeof Flex, manager: Flex.Manager): Promise<void> {
+    flex.SideNav.Content.add(<ButtonConfig key={'button-config'} />)
+
+    flex.ViewCollection.Content.add(
+      <Flex.View name='main-page' key='main-page-key'>
+        <Main />
+      </Flex.View>
+    )
+  }
 }
