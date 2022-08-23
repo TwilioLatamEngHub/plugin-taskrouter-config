@@ -1,7 +1,9 @@
 import React from 'react'
 import * as Flex from '@twilio/flex-ui'
 import { FlexPlugin } from '@twilio/flex-plugin'
+
 import { ButtonConfig, Main } from './components'
+import { TaskRouterConfigContentProvider } from './contexts'
 
 const PLUGIN_NAME = 'TaskrouterConfigPlugin'
 
@@ -21,7 +23,9 @@ export default class TaskrouterConfigPlugin extends FlexPlugin {
 
     flex.ViewCollection.Content.add(
       <Flex.View name='main-page' key='main-page-key'>
-        <Main />
+        <TaskRouterConfigContentProvider>
+          <Main />
+        </TaskRouterConfigContentProvider>
       </Flex.View>
     )
   }
