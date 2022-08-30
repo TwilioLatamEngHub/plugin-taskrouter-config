@@ -1,8 +1,15 @@
 import React, { useContext, useState } from 'react'
 import { Button } from '@twilio-paste/core'
+import styled from 'styled-components'
+
 import { ModalCreateWorker } from '../Modals'
 import { TaskRouterConfigContext } from '../../contexts'
 import { useFetchWorkspace } from '../../hooks'
+
+const ButtonWrapper = styled.div`
+  max-width: 10rem;
+  margin-bottom: 1.5rem;
+`
 
 export const ButtonCreateWorker = (): JSX.Element => {
   const { isLoading, setIsLoading } = useContext(TaskRouterConfigContext)
@@ -17,7 +24,7 @@ export const ButtonCreateWorker = (): JSX.Element => {
   }
 
   return (
-    <>
+    <ButtonWrapper>
       <Button variant='primary' onClick={handleOpen} loading={isLoading}>
         + Create Worker
       </Button>
@@ -29,6 +36,6 @@ export const ButtonCreateWorker = (): JSX.Element => {
           activities={activities}
         />
       )}
-    </>
+    </ButtonWrapper>
   )
 }
