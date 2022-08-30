@@ -1,8 +1,6 @@
 import {
-  Box,
   Heading,
   SkeletonLoader,
-  Stack,
   Table,
   TBody,
   Td,
@@ -27,6 +25,7 @@ export const Workers = (): JSX.Element => {
       )
         .then(data => data.json())
         .then(res => setWorkers(res))
+        .catch(err => console.log(err))
     }
     fetchWorkers()
   }, [])
@@ -42,27 +41,42 @@ export const Workers = (): JSX.Element => {
           <Tr>
             <Th>Agent</Th>
             <Th>SID</Th>
+            <Th>Roles</Th>
             <Th textAlign='right'>Remove</Th>
           </Tr>
         </THead>
         <TBody>
           {workers?.workers.length ? (
-            workers.workers.map(worker => (
-              <Tr key={worker.sid}>
-                <Th scope='row'>{worker.friendlyName}</Th>
-                <Td>{worker.sid}</Td>
-                <Td textAlign='right'>X</Td>
-              </Tr>
-            ))
+            workers.workers.map(worker => {
+              const attributes = JSON.parse(worker.attributes)
+              const { roles } = attributes
+              return (
+                <Tr key={worker.sid}>
+                  <Th scope='row'>{attributes.full_name}</Th>
+                  <Td>{worker.sid}</Td>
+                  <Td>
+                    {roles.length === 1
+                      ? roles[0]
+                      : roles.map((role: string) => `${role}, `)}
+                  </Td>
+                  <Td textAlign='right'>X</Td>
+                </Tr>
+              )
+            })
           ) : (
             <Tr>
-              <Box width='600px'>
-                <Stack orientation='vertical' spacing='space30'>
-                  <SkeletonLoader />
-                  <SkeletonLoader />
-                  <SkeletonLoader />
-                </Stack>
-              </Box>
+              <Th scope='row'>
+                <SkeletonLoader />
+              </Th>
+              <Td>
+                <SkeletonLoader />
+              </Td>
+              <Td>
+                <SkeletonLoader />
+              </Td>
+              <Td textAlign='right'>
+                <SkeletonLoader />
+              </Td>
             </Tr>
           )}
         </TBody>
