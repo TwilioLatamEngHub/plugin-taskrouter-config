@@ -12,7 +12,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { ButtonCreateWorker } from './Buttons'
 
-export const Worker = (): JSX.Element => {
+export const Workers = (): JSX.Element => {
   return (
     <>
       <Heading as='h1' variant='heading10'>

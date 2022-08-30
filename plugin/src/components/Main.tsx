@@ -6,7 +6,7 @@ import { DarkModeIcon } from '@twilio-paste/icons/esm/DarkModeIcon'
 import { LightModeIcon } from '@twilio-paste/icons/esm/LightModeIcon'
 
 import { ButtonCreateWorker } from './Buttons'
-import { Worker } from './Worker'
+import { Workers } from './Workers'
 
 const MainContainer = styled.div`
   width: 100%;
@@ -37,7 +37,7 @@ export const Main = (): JSX.Element => {
               )}
             </Button>
           </ButtonThemeWrapper>
-          <Worker />
+          <Workers />
         </MainContainer>
       </Theme.Provider>
     </div>
