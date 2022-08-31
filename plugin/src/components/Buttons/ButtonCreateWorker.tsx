@@ -19,14 +19,14 @@ export const ButtonCreateWorker = ({
   setWorkers
 }: ButtonCreateWorkerProps): JSX.Element => {
   const { isLoading, setIsLoading } = useContext(TaskRouterConfigContext)
-  const { workspaceName, activities, fetchWorkspace } = useFetchWorkspace()
+  const { workspaceName, activities, getWorkspace } = useFetchWorkspace()
 
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const handleOpen = async () => {
     setIsOpen(true)
     setIsLoading(true)
-    await fetchWorkspace()
+    await getWorkspace()
   }
 
   return (

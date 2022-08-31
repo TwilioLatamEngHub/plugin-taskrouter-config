@@ -1,11 +1,12 @@
 import { useContext, useState } from 'react'
 
+import { fetchWorkspace } from '../services'
 import { TaskRouterConfigContext } from '../contexts'
 
 interface UseFetchWorkspaceReturn {
   workspaceName: string
   activities: Array<any>
-  fetchWorkspace: () => Promise<void>
+  getWorkspace: () => Promise<void>
 }
 
 export const useFetchWorkspace = (): UseFetchWorkspaceReturn => {
@@ -13,11 +14,8 @@ export const useFetchWorkspace = (): UseFetchWorkspaceReturn => {
   const [workspaceName, setWorkspaceName] = useState<string>('')
   const [activities, setActivities] = useState<[]>([])
 
-  const fetchWorkspace = async () => {
-    await fetch(
-      'https://serverless-taskrouter-config-5449-dev.twil.io/fetch-workspace'
-    )
-      .then(data => data.json())
+  const getWorkspace = async () => {
+    await fetchWorkspace()
       .then(res => {
         setWorkspaceName(res.workspaceName)
         setActivities(res.activities)
@@ -29,5 +27,5 @@ export const useFetchWorkspace = (): UseFetchWorkspaceReturn => {
       })
   }
 
-  return { workspaceName, activities, fetchWorkspace }
+  return { workspaceName, activities, getWorkspace }
 }

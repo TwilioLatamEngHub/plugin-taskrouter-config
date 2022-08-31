@@ -1,4 +1,5 @@
 const FETCH_WORKERS_URL = process.env.FLEX_APP_URL_FETCH_WORKERS
+const FETCH_WORKSPACE_URL = process.env.FLEX_APP_URL_FETCH_WORKSPACE
 const CREATE_WORKER_URL = process.env.FLEX_APP_URL_CREATE_WORKER
 const DELETE_WORKER_URL = process.env.FLEX_APP_URL_DELETE_WORKER
 
@@ -12,6 +13,14 @@ export const fetchWorkers = async () => {
     ? await fetch(FETCH_WORKERS_URL)
         .then(data => data.json())
         .then(res => res.workers)
+        .catch(err => err)
+    : logError()
+}
+export const fetchWorkspace = async () => {
+  return FETCH_WORKSPACE_URL
+    ? await fetch(FETCH_WORKSPACE_URL)
+        .then(data => data.json())
+        .then(res => res)
         .catch(err => err)
     : logError()
 }
