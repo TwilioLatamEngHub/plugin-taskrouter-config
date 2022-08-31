@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { Dispatch, SetStateAction, useContext, useState } from 'react'
 import { Button } from '@twilio-paste/core'
 import styled from 'styled-components'
 
@@ -11,7 +11,13 @@ const ButtonWrapper = styled.div`
   margin-bottom: 1.5rem;
 `
 
-export const ButtonCreateWorker = (): JSX.Element => {
+interface ButtonCreateWorkerProps {
+  setWorkers: Dispatch<SetStateAction<any[]>>
+}
+
+export const ButtonCreateWorker = ({
+  setWorkers
+}: ButtonCreateWorkerProps): JSX.Element => {
   const { isLoading, setIsLoading } = useContext(TaskRouterConfigContext)
   const { workspaceName, activities, fetchWorkspace } = useFetchWorkspace()
 
@@ -34,6 +40,7 @@ export const ButtonCreateWorker = (): JSX.Element => {
           setIsOpen={setIsOpen}
           workspaceName={workspaceName}
           activities={activities}
+          setWorkers={setWorkers}
         />
       )}
     </ButtonWrapper>

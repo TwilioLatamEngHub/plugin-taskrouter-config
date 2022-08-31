@@ -16,7 +16,7 @@ import styled from 'styled-components'
 
 import { ButtonCreateWorker } from './Buttons'
 import { TaskRouterConfigContext } from '../contexts'
-import { fetchWorkers } from '../services'
+import { deleteWorker, fetchWorkers } from '../services'
 
 const DeleteIconWrapper = styled.div`
   display: flex;
@@ -37,7 +37,6 @@ export const Workers = (): JSX.Element => {
     const handleFetchWorkers = async () => {
       await fetchWorkers()
         .then((workers: any) => {
-          console.log(workers)
           setWorkers(workers)
           setIsLoading(false)
         })
@@ -49,14 +48,31 @@ export const Workers = (): JSX.Element => {
     handleFetchWorkers()
   }, [])
 
-  const handleDelete = async () => {}
+  const handleDelete = async (sid: string) => {
+    setIsLoading(true)
+    await deleteWorker(sid)
+      .then(async () => {
+        setIsOpen(false)
+        await fetchWorkers().then((workers: any) => setWorkers(workers))
+      })
+      .then(() => {
+        setIsLoading(false)
+        Notifications.showNotification('workerDeleted')
+      })
+      .catch(err => {
+        console.log(err)
+        setIsLoading(false)
+        setIsOpen(false)
+        Notifications.showNotification('errorWorkerCreated')
+      })
+  }
 
   return (
     <>
       <Heading as='h1' variant='heading10'>
         Workers
       </Heading>
-      <ButtonCreateWorker />
+      <ButtonCreateWorker setWorkers={setWorkers} />
       <Table variant='borderless'>
         <THead>
           <Tr>
@@ -78,7 +94,7 @@ export const Workers = (): JSX.Element => {
                   <AlertDialog
                     heading='Delete Agent?'
                     isOpen={isOpen}
-                    onConfirm={handleDelete}
+                    onConfirm={() => handleDelete(worker.sid)}
                     onConfirmLabel='Submit'
                     onDismiss={handleClose}
                     onDismissLabel='Cancel'
