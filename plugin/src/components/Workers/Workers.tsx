@@ -28,8 +28,6 @@ const IconWrapper = styled.div`
   cursor: pointer;
 `
 
-const DELETE_WORKER_URL = process.env.FLEX_APP_URL_DELETE_WORKER
-
 export const Workers = (): JSX.Element => {
   const { isLoading, setIsLoading } = useContext(TaskRouterConfigContext)
   const { setActivities, setWorkspaceName } = useContext(WorkersConfigContext)
@@ -177,7 +175,10 @@ export const Workers = (): JSX.Element => {
               <Td>
                 <SkeletonLoader />
               </Td>
-              <Td>
+              <Td textAlign='right'>
+                <SkeletonLoader />
+              </Td>
+              <Td textAlign='right'>
                 <SkeletonLoader />
               </Td>
               <Td textAlign='right'>
