@@ -28,19 +28,14 @@ import { InformationIcon } from '@twilio-paste/icons/esm/InformationIcon'
 
 import { TaskRouterConfigContext, WorkersConfigContext } from '../../contexts'
 import { updateWorker, fetchWorkers } from '../../services'
+import {
+  ModalCreateWorkerProps,
+  modalHeadingID,
+  tooltipText,
+  tooltipURL
+} from './ModalCreateWorker'
 
-interface ModalUpdateWorkerProps {
-  isOpen: boolean
-  setIsOpen: Dispatch<SetStateAction<boolean>>
-  worker: any
-  setWorkers: Dispatch<SetStateAction<any[]>>
-}
-
-const modalHeadingID = 'modal-heading'
-
-const tooltipText = `Attributes model each Worker's unique properties as a JSON document. Workflows route Tasks to Workers based on these attributes. Example: {"name": "Alice", "technical_skill": 5, "languages": ["pt", "es", "en"]}`
-const tooltipURL =
-  'https://www.twilio.com/docs/taskrouter/api/worker#worker-properties'
+type ModalUpdateWorkerProps = ModalCreateWorkerProps & { worker: any }
 
 export const ModalUpdateWorker = ({
   isOpen,
@@ -88,9 +83,6 @@ export const ModalUpdateWorker = ({
 
     setIsLoading(false)
   }
-
-  console.log('worker')
-  console.log(worker)
 
   return (
     <Modal
