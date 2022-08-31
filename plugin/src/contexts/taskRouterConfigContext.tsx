@@ -1,6 +1,6 @@
 import React, { createContext, Dispatch, SetStateAction, useState } from 'react'
 
-export interface TaskRouterConfigContextData {
+interface TaskRouterConfigContextData {
   isLoading: boolean
   setIsLoading: Dispatch<SetStateAction<boolean>>
 }

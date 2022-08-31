@@ -12,13 +12,15 @@ import {
   Tr
 } from '@twilio-paste/core'
 import { DeleteIcon } from '@twilio-paste/icons/esm/DeleteIcon'
+import { EditIcon } from '@twilio-paste/icons/esm/EditIcon'
 import styled from 'styled-components'
 
 import { ButtonCreateWorker } from './ButtonCreateWorker'
-import { TaskRouterConfigContext } from '../../contexts'
-import { deleteWorker, fetchWorkers } from '../../services'
+import { TaskRouterConfigContext, WorkersConfigContext } from '../../contexts'
+import { deleteWorker, fetchWorkers, fetchWorkspace } from '../../services'
+import { ModalUpdateWorker } from './ModalUpdateWorker'
 
-const DeleteIconWrapper = styled.div`
+const IconWrapper = styled.div`
   display: flex;
   justify-content: center;
   cursor: pointer;
@@ -26,8 +28,27 @@ const DeleteIconWrapper = styled.div`
 
 export const Workers = (): JSX.Element => {
   const { isLoading, setIsLoading } = useContext(TaskRouterConfigContext)
+  const { setActivities, setWorkspaceName } = useContext(WorkersConfigContext)
+  const [worker, setWorker] = useState<any>({})
   const [workers, setWorkers] = useState<any[]>([])
-  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false)
+  const [isWorkerModalOpen, setIsWorkerModalOpen] = useState<boolean>(false)
+
+  useEffect(() => {
+    const getWorkspace = async () => {
+      await fetchWorkspace()
+        .then(res => {
+          setWorkspaceName(res.workspaceName)
+          setActivities(res.activities)
+          setIsLoading(false)
+        })
+        .catch(err => {
+          console.log(err)
+          setIsLoading(false)
+        })
+    }
+    getWorkspace()
+  }, [])
 
   useEffect(() => {
     setIsLoading(true)
@@ -45,16 +66,20 @@ export const Workers = (): JSX.Element => {
     handleFetchWorkers()
   }, [])
 
-  const handleRowClick = () => {}
+  const handleRowClick = (sid: string) => {
+    setIsWorkerModalOpen(!isWorkerModalOpen)
+    const clickedWorker = workers.find(w => w.sid === sid)
+    setWorker(clickedWorker)
+  }
 
-  const handleOpen = () => setIsOpen(true)
-  const handleClose = () => setIsOpen(false)
+  const handleAlertOpen = () => setIsAlertOpen(true)
+  const handleAlertClose = () => setIsAlertOpen(false)
 
   const handleDelete = async (sid: string) => {
     setIsLoading(true)
     await deleteWorker(sid)
       .then(async () => {
-        setIsOpen(false)
+        setIsAlertOpen(false)
         await fetchWorkers().then((workers: any) => setWorkers(workers))
       })
       .then(() => {
@@ -64,7 +89,7 @@ export const Workers = (): JSX.Element => {
       .catch(err => {
         console.log(err)
         setIsLoading(false)
-        setIsOpen(false)
+        setIsAlertOpen(false)
         Notifications.showNotification('errorWorkerCreated')
       })
   }
@@ -80,32 +105,46 @@ export const Workers = (): JSX.Element => {
           <Tr>
             <Th>Agent</Th>
             <Th>SID</Th>
+            <Th textAlign='center'>Edit</Th>
             <Th textAlign='center'>Delete</Th>
           </Tr>
         </THead>
         <TBody>
           {!isLoading && workers.length > 0 ? (
-            workers.map(worker => (
-              <Tr key={worker.sid} onClick={handleRowClick}>
-                <Th scope='row'>{worker.friendlyName}</Th>
-                <Td>{worker.sid}</Td>
-                <Td textAlign='right'>
-                  <DeleteIconWrapper onClick={handleOpen}>
-                    <DeleteIcon decorative={false} title='Delete Agent' />
-                  </DeleteIconWrapper>
-                  <AlertDialog
-                    heading='Delete Agent?'
-                    isOpen={isOpen}
-                    onConfirm={() => handleDelete(worker.sid)}
-                    onConfirmLabel='Submit'
-                    onDismiss={handleClose}
-                    onDismissLabel='Cancel'
-                  >
-                    Are you sure you want to delete this agent?
-                  </AlertDialog>
-                </Td>
-              </Tr>
-            ))
+            <>
+              {workers.map(worker => (
+                <Tr key={worker.sid}>
+                  <Th scope='row'>{worker.friendlyName}</Th>
+                  <Td>{worker.sid}</Td>
+                  <Td textAlign='right'>
+                    <IconWrapper onClick={() => handleRowClick(worker.sid)}>
+                      <EditIcon decorative={false} title='Edit Worker' />
+                    </IconWrapper>
+                  </Td>
+                  <Td textAlign='right'>
+                    <IconWrapper onClick={handleAlertOpen}>
+                      <DeleteIcon decorative={false} title='Delete Worker' />
+                    </IconWrapper>
+                    <AlertDialog
+                      heading='Delete Agent?'
+                      isOpen={isAlertOpen}
+                      onConfirm={() => handleDelete(worker.sid)}
+                      onConfirmLabel='Submit'
+                      onDismiss={handleAlertClose}
+                      onDismissLabel='Cancel'
+                    >
+                      Are you sure you want to delete this agent?
+                    </AlertDialog>
+                  </Td>
+                </Tr>
+              ))}
+              <ModalUpdateWorker
+                isOpen={isWorkerModalOpen}
+                setIsOpen={setIsWorkerModalOpen}
+                setWorkers={setWorkers}
+                worker={worker}
+              />
+            </>
           ) : (
             <Tr>
               <Th scope='row'>

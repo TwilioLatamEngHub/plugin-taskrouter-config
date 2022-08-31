@@ -27,23 +27,27 @@ import {
 import { InformationIcon } from '@twilio-paste/icons/esm/InformationIcon'
 
 import { TaskRouterConfigContext, WorkersConfigContext } from '../../contexts'
-import { createWorker, fetchWorkers } from '../../services'
+import { updateWorker, fetchWorkers } from '../../services'
 
-interface ModalCreateWorkerProps {
+interface ModalUpdateWorkerProps {
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
+  worker: any
   setWorkers: Dispatch<SetStateAction<any[]>>
 }
+
+const modalHeadingID = 'modal-heading'
 
 const tooltipText = `Attributes model each Worker's unique properties as a JSON document. Workflows route Tasks to Workers based on these attributes. Example: {"name": "Alice", "technical_skill": 5, "languages": ["pt", "es", "en"]}`
 const tooltipURL =
   'https://www.twilio.com/docs/taskrouter/api/worker#worker-properties'
 
-export const ModalCreateWorker = ({
+export const ModalUpdateWorker = ({
   isOpen,
   setIsOpen,
+  worker,
   setWorkers
-}: ModalCreateWorkerProps): JSX.Element => {
+}: ModalUpdateWorkerProps): JSX.Element => {
   const { isLoading, setIsLoading } = useContext(TaskRouterConfigContext)
   const { activities, workspaceName } = useContext(WorkersConfigContext)
   const [friendlyName, setFriendlyName] = useState<string>('')
@@ -51,19 +55,22 @@ export const ModalCreateWorker = ({
   const [attributes, setAttributes] = useState<string>(JSON.stringify({}))
 
   useEffect(() => {
-    if (activities.length > 0) {
-      setActivitySid(activities[0].sid)
-    }
-  }, [activities])
+    setFriendlyName(worker.friendlyName)
+    setActivitySid(worker.activitySid)
+    setAttributes(worker.attributes)
+  }, [worker])
 
   const handleClose = () => setIsOpen(false)
-
-  const modalHeadingID = 'modal-heading'
 
   const handleOnSubmit = async () => {
     setIsLoading(true)
 
-    await createWorker({ friendlyName, activitySid, attributes })
+    await updateWorker({
+      friendlyName,
+      activitySid,
+      attributes,
+      workerSid: worker.sid
+    })
       .then(async () => {
         setIsOpen(false)
         await fetchWorkers().then((workers: any) => setWorkers(workers))
@@ -82,6 +89,9 @@ export const ModalCreateWorker = ({
     setIsLoading(false)
   }
 
+  console.log('worker')
+  console.log(worker)
+
   return (
     <Modal
       ariaLabelledby={modalHeadingID}
@@ -91,7 +101,7 @@ export const ModalCreateWorker = ({
     >
       <ModalHeader>
         <ModalHeading as='h3' id={modalHeadingID}>
-          Create Worker
+          Update Worker
         </ModalHeading>
       </ModalHeader>
       <ModalBody>
@@ -138,6 +148,7 @@ export const ModalCreateWorker = ({
         <TextArea
           id='attributes'
           name='attributes'
+          value={attributes}
           onChange={e => setAttributes(e.target.value)}
         />
       </ModalBody>

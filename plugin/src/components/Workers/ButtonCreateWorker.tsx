@@ -4,7 +4,6 @@ import styled from 'styled-components'
 
 import { ModalCreateWorker } from './ModalCreateWorker'
 import { TaskRouterConfigContext } from '../../contexts'
-import { useFetchWorkspace } from '../../hooks'
 
 const ButtonWrapper = styled.div`
   max-width: 10rem;
@@ -18,31 +17,23 @@ interface ButtonCreateWorkerProps {
 export const ButtonCreateWorker = ({
   setWorkers
 }: ButtonCreateWorkerProps): JSX.Element => {
-  const { isLoading, setIsLoading } = useContext(TaskRouterConfigContext)
-  const { workspaceName, activities, getWorkspace } = useFetchWorkspace()
-
+  const { isLoading } = useContext(TaskRouterConfigContext)
   const [isOpen, setIsOpen] = useState<boolean>(false)
-
-  const handleOpen = async () => {
-    setIsOpen(true)
-    setIsLoading(true)
-    await getWorkspace()
-  }
 
   return (
     <ButtonWrapper>
-      <Button variant='primary' onClick={handleOpen} loading={isLoading}>
+      <Button
+        variant='primary'
+        onClick={() => setIsOpen(true)}
+        loading={isLoading}
+      >
         + Create Worker
       </Button>
-      {!isLoading && (
-        <ModalCreateWorker
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          workspaceName={workspaceName}
-          activities={activities}
-          setWorkers={setWorkers}
-        />
-      )}
+      <ModalCreateWorker
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        setWorkers={setWorkers}
+      />
     </ButtonWrapper>
   )
 }
