@@ -1,13 +1,17 @@
-const FETCH_WORKERS_URL = process.env.FLEX_APP_URL_FETCH_WORKERS
-const FETCH_WORKSPACE_URL = process.env.FLEX_APP_URL_FETCH_WORKSPACE
-const CREATE_WORKER_URL = process.env.FLEX_APP_URL_CREATE_WORKER
-const UPDATE_WORKER_URL = process.env.FLEX_APP_URL_UPDATE_WORKER
-const DELETE_WORKER_URL = process.env.FLEX_APP_URL_DELETE_WORKER
+import { CreateWorker, UpdateWorker } from './types'
 
 const logError = () =>
   console.error(
     'URL missing, please add the correct functions URLs, restart the server and try again'
   )
+
+// Workers
+
+const FETCH_WORKERS_URL = process.env.FLEX_APP_URL_FETCH_WORKERS
+const FETCH_WORKSPACE_URL = process.env.FLEX_APP_URL_FETCH_WORKSPACE
+const CREATE_WORKER_URL = process.env.FLEX_APP_URL_CREATE_WORKER
+const UPDATE_WORKER_URL = process.env.FLEX_APP_URL_UPDATE_WORKER
+const DELETE_WORKER_URL = process.env.FLEX_APP_URL_DELETE_WORKER
 
 export const fetchWorkers = async () => {
   return FETCH_WORKERS_URL
@@ -17,6 +21,7 @@ export const fetchWorkers = async () => {
         .catch(err => err)
     : logError()
 }
+
 export const fetchWorkspace = async () => {
   return FETCH_WORKSPACE_URL
     ? await fetch(FETCH_WORKSPACE_URL)
@@ -24,12 +29,6 @@ export const fetchWorkspace = async () => {
         .then(res => res)
         .catch(err => err)
     : logError()
-}
-
-interface CreateWorker {
-  friendlyName: string
-  activitySid: string
-  attributes: string
 }
 
 export const createWorker = async ({
@@ -49,8 +48,6 @@ export const createWorker = async ({
         .catch(err => err)
     : logError()
 }
-
-type UpdateWorker = CreateWorker & { workerSid: string }
 
 export const updateWorker = async ({
   friendlyName,
