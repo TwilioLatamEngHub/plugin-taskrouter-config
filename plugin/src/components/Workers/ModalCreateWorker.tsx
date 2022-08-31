@@ -1,10 +1,4 @@
-import React, {
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useState
-} from 'react'
+import React, { Dispatch, SetStateAction, useContext } from 'react'
 import { Notifications } from '@twilio/flex-ui'
 import {
   Anchor,

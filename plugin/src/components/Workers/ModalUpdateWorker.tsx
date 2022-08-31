@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Notifications } from '@twilio/flex-ui'
 import {
   Anchor,

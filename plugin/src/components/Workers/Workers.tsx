@@ -11,14 +11,16 @@ import {
   THead,
   Tr
 } from '@twilio-paste/core'
-import { DeleteIcon } from '@twilio-paste/icons/esm/DeleteIcon'
+import { FileIcon } from '@twilio-paste/icons/esm/FileIcon'
 import { EditIcon } from '@twilio-paste/icons/esm/EditIcon'
+import { DeleteIcon } from '@twilio-paste/icons/esm/DeleteIcon'
 import styled from 'styled-components'
 
 import { ButtonCreateWorker } from './ButtonCreateWorker'
 import { TaskRouterConfigContext, WorkersConfigContext } from '../../contexts'
 import { deleteWorker, fetchWorkers, fetchWorkspace } from '../../services'
 import { ModalUpdateWorker } from './ModalUpdateWorker'
+import { ModalJSONWorker } from './ModalJSONWorker'
 
 const IconWrapper = styled.div`
   display: flex;
@@ -35,6 +37,7 @@ export const Workers = (): JSX.Element => {
   const [workers, setWorkers] = useState<any[]>([])
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false)
   const [isWorkerModalOpen, setIsWorkerModalOpen] = useState<boolean>(false)
+  const [isJSONModalOpen, setIsJSONModalOpen] = useState<boolean>(false)
 
   useEffect(() => {
     const getWorkspace = async () => {
@@ -68,7 +71,13 @@ export const Workers = (): JSX.Element => {
     handleFetchWorkers()
   }, [])
 
-  const handleRowClick = (sid: string) => {
+  const handleJSON = (sid: string) => {
+    setIsJSONModalOpen(true)
+    const clickedWorker = workers.find(w => w.sid === sid)
+    setWorker(clickedWorker)
+  }
+
+  const handleEdit = (sid: string) => {
     setIsWorkerModalOpen(!isWorkerModalOpen)
     const clickedWorker = workers.find(w => w.sid === sid)
     setWorker(clickedWorker)
@@ -109,6 +118,7 @@ export const Workers = (): JSX.Element => {
           <Tr>
             <Th>Agent</Th>
             <Th>SID</Th>
+            <Th textAlign='center'>JSON</Th>
             <Th textAlign='center'>Edit</Th>
             <Th textAlign='center'>Delete</Th>
           </Tr>
@@ -121,7 +131,12 @@ export const Workers = (): JSX.Element => {
                   <Th scope='row'>{worker.friendlyName}</Th>
                   <Td>{worker.sid}</Td>
                   <Td textAlign='right'>
-                    <IconWrapper onClick={() => handleRowClick(worker.sid)}>
+                    <IconWrapper onClick={() => handleJSON(worker.sid)}>
+                      <FileIcon decorative={false} title='Worker Details' />
+                    </IconWrapper>
+                  </Td>
+                  <Td textAlign='right'>
+                    <IconWrapper onClick={() => handleEdit(worker.sid)}>
                       <EditIcon decorative={false} title='Edit Worker' />
                     </IconWrapper>
                   </Td>
@@ -146,6 +161,11 @@ export const Workers = (): JSX.Element => {
                 isOpen={isWorkerModalOpen}
                 setIsOpen={setIsWorkerModalOpen}
                 setWorkers={setWorkers}
+                worker={worker}
+              />
+              <ModalJSONWorker
+                isOpen={isJSONModalOpen}
+                setIsOpen={setIsJSONModalOpen}
                 worker={worker}
               />
             </>
