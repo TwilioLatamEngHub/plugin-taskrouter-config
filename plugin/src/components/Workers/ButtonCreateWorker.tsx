@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction, useContext, useState } from 'react'
 import { Button } from '@twilio-paste/core'
 import styled from 'styled-components'
 
-import { ModalCreateWorker } from '../Modals'
+import { ModalCreateWorker } from './ModalCreateWorker'
 import { TaskRouterConfigContext } from '../../contexts'
 import { useFetchWorkspace } from '../../hooks'
 

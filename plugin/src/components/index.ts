@@ -1,2 +1,2 @@
-export * from './Buttons'
 export * from './Main'
+export * from './ButtonConfig'

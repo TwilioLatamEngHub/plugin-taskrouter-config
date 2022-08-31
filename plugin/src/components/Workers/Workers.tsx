@@ -14,9 +14,9 @@ import {
 import { DeleteIcon } from '@twilio-paste/icons/esm/DeleteIcon'
 import styled from 'styled-components'
 
-import { ButtonCreateWorker } from './Buttons'
-import { TaskRouterConfigContext } from '../contexts'
-import { deleteWorker, fetchWorkers } from '../services'
+import { ButtonCreateWorker } from './ButtonCreateWorker'
+import { TaskRouterConfigContext } from '../../contexts'
+import { deleteWorker, fetchWorkers } from '../../services'
 
 const DeleteIconWrapper = styled.div`
   display: flex;
@@ -28,9 +28,6 @@ export const Workers = (): JSX.Element => {
   const { isLoading, setIsLoading } = useContext(TaskRouterConfigContext)
   const [workers, setWorkers] = useState<any[]>([])
   const [isOpen, setIsOpen] = useState<boolean>(false)
-
-  const handleOpen = () => setIsOpen(true)
-  const handleClose = () => setIsOpen(false)
 
   useEffect(() => {
     setIsLoading(true)
@@ -47,6 +44,11 @@ export const Workers = (): JSX.Element => {
     }
     handleFetchWorkers()
   }, [])
+
+  const handleRowClick = () => {}
+
+  const handleOpen = () => setIsOpen(true)
+  const handleClose = () => setIsOpen(false)
 
   const handleDelete = async (sid: string) => {
     setIsLoading(true)
@@ -84,7 +86,7 @@ export const Workers = (): JSX.Element => {
         <TBody>
           {!isLoading && workers.length > 0 ? (
             workers.map(worker => (
-              <Tr key={worker.sid}>
+              <Tr key={worker.sid} onClick={handleRowClick}>
                 <Th scope='row'>{worker.friendlyName}</Th>
                 <Td>{worker.sid}</Td>
                 <Td textAlign='right'>

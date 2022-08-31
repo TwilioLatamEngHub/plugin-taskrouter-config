@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Theme } from '@twilio-paste/theme'
-import { Button, Heading } from '@twilio-paste/core'
+import { Button } from '@twilio-paste/core'
 import { DarkModeIcon } from '@twilio-paste/icons/esm/DarkModeIcon'
 import { LightModeIcon } from '@twilio-paste/icons/esm/LightModeIcon'
 
-import { ButtonCreateWorker } from './Buttons'
 import { Workers } from './Workers'
 
 const MainContainer = styled.div`
