@@ -5,6 +5,12 @@ interface WorkersConfigContextData {
   setWorkspaceName: Dispatch<SetStateAction<string>>
   activities: any[]
   setActivities: Dispatch<SetStateAction<any[]>>
+  friendlyName: string
+  setFriendlyName: Dispatch<SetStateAction<string>>
+  activitySid: string
+  setActivitySid: Dispatch<SetStateAction<string>>
+  attributes: string
+  setAttributes: Dispatch<SetStateAction<string>>
 }
 
 interface WorkersConfigContentProviderProps {
@@ -20,12 +26,21 @@ export const WorkersConfigContentProvider = ({
 }: WorkersConfigContentProviderProps) => {
   const [workspaceName, setWorkspaceName] = useState<string>('')
   const [activities, setActivities] = useState<any[]>([])
+  const [friendlyName, setFriendlyName] = useState<string>('')
+  const [activitySid, setActivitySid] = useState<string>('')
+  const [attributes, setAttributes] = useState<string>(JSON.stringify({}))
 
   const workersConfigContextDefaultValue = {
     workspaceName,
     setWorkspaceName,
     activities,
-    setActivities
+    setActivities,
+    friendlyName,
+    setFriendlyName,
+    activitySid,
+    setActivitySid,
+    attributes,
+    setAttributes
   }
 
   return (

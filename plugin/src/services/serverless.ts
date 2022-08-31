@@ -77,6 +77,6 @@ export const deleteWorker = async (sid: string) => {
   return DELETE_WORKER_URL
     ? await fetch(`${DELETE_WORKER_URL}?workerSid=${sid}`)
         .then(data => data.json())
-        .catch(err => err)
+        .then(res => res)
     : logError()
 }

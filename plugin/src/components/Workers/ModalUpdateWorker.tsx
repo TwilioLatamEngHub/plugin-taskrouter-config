@@ -38,10 +38,16 @@ export const ModalUpdateWorker = ({
   setWorkers
 }: ModalUpdateWorkerProps): JSX.Element => {
   const { isLoading, setIsLoading } = useContext(TaskRouterConfigContext)
-  const { activities, workspaceName } = useContext(WorkersConfigContext)
-  const [friendlyName, setFriendlyName] = useState<string>('')
-  const [activitySid, setActivitySid] = useState<string>('')
-  const [attributes, setAttributes] = useState<string>(JSON.stringify({}))
+  const {
+    activities,
+    workspaceName,
+    activitySid,
+    setActivitySid,
+    friendlyName,
+    setFriendlyName,
+    attributes,
+    setAttributes
+  } = useContext(WorkersConfigContext)
 
   useEffect(() => {
     setFriendlyName(worker.friendlyName)
@@ -78,6 +84,9 @@ export const ModalUpdateWorker = ({
     setIsLoading(false)
   }
 
+  console.log('worker')
+  console.log(worker)
+
   return (
     <Modal
       ariaLabelledby={modalHeadingID}
@@ -108,6 +117,7 @@ export const ModalUpdateWorker = ({
         <Select
           id='activity'
           name='activity'
+          defaultValue={activitySid}
           onChange={e => setActivitySid(e.target.value)}
         >
           {activities.map(({ friendlyName, sid }) => {

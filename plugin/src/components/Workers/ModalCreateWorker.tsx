@@ -47,16 +47,16 @@ export const ModalCreateWorker = ({
   setWorkers
 }: ModalCreateWorkerProps): JSX.Element => {
   const { isLoading, setIsLoading } = useContext(TaskRouterConfigContext)
-  const { activities, workspaceName } = useContext(WorkersConfigContext)
-  const [friendlyName, setFriendlyName] = useState<string>('')
-  const [activitySid, setActivitySid] = useState<string>('')
-  const [attributes, setAttributes] = useState<string>(JSON.stringify({}))
-
-  useEffect(() => {
-    if (activities.length > 0) {
-      setActivitySid(activities[0].sid)
-    }
-  }, [activities])
+  const {
+    activities,
+    workspaceName,
+    activitySid,
+    setActivitySid,
+    friendlyName,
+    setFriendlyName,
+    attributes,
+    setAttributes
+  } = useContext(WorkersConfigContext)
 
   const handleClose = () => setIsOpen(false)
 
@@ -112,6 +112,7 @@ export const ModalCreateWorker = ({
         <Select
           id='activity'
           name='activity'
+          defaultValue={activities.length > 0 && activities[0].sid}
           onChange={e => setActivitySid(e.target.value)}
         >
           {activities.map(({ friendlyName, sid }) => {

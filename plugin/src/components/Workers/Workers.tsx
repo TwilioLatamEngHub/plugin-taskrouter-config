@@ -26,6 +26,8 @@ const IconWrapper = styled.div`
   cursor: pointer;
 `
 
+const DELETE_WORKER_URL = process.env.FLEX_APP_URL_DELETE_WORKER
+
 export const Workers = (): JSX.Element => {
   const { isLoading, setIsLoading } = useContext(TaskRouterConfigContext)
   const { setActivities, setWorkspaceName } = useContext(WorkersConfigContext)
@@ -77,21 +79,23 @@ export const Workers = (): JSX.Element => {
 
   const handleDelete = async (sid: string) => {
     setIsLoading(true)
-    await deleteWorker(sid)
-      .then(async () => {
-        setIsAlertOpen(false)
-        await fetchWorkers().then((workers: any) => setWorkers(workers))
-      })
-      .then(() => {
-        setIsLoading(false)
-        Notifications.showNotification('workerDeleted')
-      })
-      .catch(err => {
-        console.log(err)
-        setIsLoading(false)
-        setIsAlertOpen(false)
-        Notifications.showNotification('errorWorkerCreated')
-      })
+    try {
+      await deleteWorker(sid)
+        .then(res => {
+          if (res.error) throw new Error(res.error)
+        })
+        .then(async () => {
+          setIsAlertOpen(false)
+          await fetchWorkers().then((workers: any) => setWorkers(workers))
+        })
+      setIsLoading(false)
+      Notifications.showNotification('workerDeleted')
+    } catch (error) {
+      console.error(error)
+      setIsLoading(false)
+      setIsAlertOpen(false)
+      Notifications.showNotification('errorWorkerCreated')
+    }
   }
 
   return (

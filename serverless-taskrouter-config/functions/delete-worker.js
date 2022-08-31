@@ -7,10 +7,18 @@ exports.handler = async function (context, event, callback) {
 
   const { workerSid } = event
 
-  await client.taskrouter.v1
-    .workspaces(workspaceSid)
-    .workers(workerSid)
-    .remove()
-    .then(() => callback(null, response))
-    .catch(error => callback(error))
+  try {
+    await client.taskrouter.v1
+      .workspaces(workspaceSid)
+      .workers(workerSid)
+      .remove()
+
+    response.setBody({ success: 'Worker deleted' })
+    response.setStatusCode(200)
+    return callback(null, response)
+  } catch (error) {
+    response.setBody({ error: error.message })
+    response.setStatusCode(500)
+    return callback(null, response)
+  }
 }
