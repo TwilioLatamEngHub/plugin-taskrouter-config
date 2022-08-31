@@ -19,7 +19,7 @@ const ButtonThemeWrapper = styled.div`
 `
 
 export const Main = (): JSX.Element => {
-  const [togglePressed, setTogglePressed] = useState(false)
+  const [togglePressed, setTogglePressed] = useState(true)
 
   return (
     <div id='tester' style={{ width: '100%', margin: '1rem' }}>

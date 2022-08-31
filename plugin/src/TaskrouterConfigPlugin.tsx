@@ -1,11 +1,10 @@
 import React from 'react'
 import * as Flex from '@twilio/flex-ui'
 import { FlexPlugin } from '@twilio/flex-plugin'
-import { Theme } from '@twilio-paste/theme'
 
 import { ButtonConfig, Main } from './components'
 import { TaskRouterConfigContentProvider } from './contexts'
-import { Button } from '@twilio-paste/core/button'
+import './notifications'
 
 const PLUGIN_NAME = 'TaskrouterConfigPlugin'
 

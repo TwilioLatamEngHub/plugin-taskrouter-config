@@ -1,4 +1,7 @@
+import React, { useContext, useEffect, useState } from 'react'
+import { Notifications } from '@twilio/flex-ui'
 import {
+  AlertDialog,
   Heading,
   SkeletonLoader,
   Table,
@@ -8,27 +11,45 @@ import {
   THead,
   Tr
 } from '@twilio-paste/core'
-import React, { useEffect, useState } from 'react'
-import { ButtonCreateWorker } from './Buttons'
+import { DeleteIcon } from '@twilio-paste/icons/esm/DeleteIcon'
+import styled from 'styled-components'
 
-interface Workers {
-  workers: any[]
-}
+import { ButtonCreateWorker } from './Buttons'
+import { TaskRouterConfigContext } from '../contexts'
+import { fetchWorkers } from '../services'
+
+const DeleteIconWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+`
 
 export const Workers = (): JSX.Element => {
-  const [workers, setWorkers] = useState<Workers | null>(null)
+  const { isLoading, setIsLoading } = useContext(TaskRouterConfigContext)
+  const [workers, setWorkers] = useState<any[]>([])
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+
+  const handleOpen = () => setIsOpen(true)
+  const handleClose = () => setIsOpen(false)
 
   useEffect(() => {
-    const fetchWorkers = async () => {
-      await fetch(
-        'https://serverless-taskrouter-config-5449-dev.twil.io/fetch-workers'
-      )
-        .then(data => data.json())
-        .then(res => setWorkers(res))
-        .catch(err => console.log(err))
+    setIsLoading(true)
+    const handleFetchWorkers = async () => {
+      await fetchWorkers()
+        .then((workers: any) => {
+          console.log(workers)
+          setWorkers(workers)
+          setIsLoading(false)
+        })
+        .catch(err => {
+          console.log(err)
+          setIsLoading(false)
+        })
     }
-    fetchWorkers()
+    handleFetchWorkers()
   }, [])
+
+  const handleDelete = async () => {}
 
   return (
     <>
@@ -41,28 +62,32 @@ export const Workers = (): JSX.Element => {
           <Tr>
             <Th>Agent</Th>
             <Th>SID</Th>
-            <Th>Roles</Th>
-            <Th textAlign='right'>Remove</Th>
+            <Th textAlign='center'>Delete</Th>
           </Tr>
         </THead>
         <TBody>
-          {workers?.workers.length ? (
-            workers.workers.map(worker => {
-              const attributes = JSON.parse(worker.attributes)
-              const { roles } = attributes
-              return (
-                <Tr key={worker.sid}>
-                  <Th scope='row'>{attributes.full_name}</Th>
-                  <Td>{worker.sid}</Td>
-                  <Td>
-                    {roles.length === 1
-                      ? roles[0]
-                      : roles.map((role: string) => `${role}, `)}
-                  </Td>
-                  <Td textAlign='right'>X</Td>
-                </Tr>
-              )
-            })
+          {!isLoading && workers.length > 0 ? (
+            workers.map(worker => (
+              <Tr key={worker.sid}>
+                <Th scope='row'>{worker.friendlyName}</Th>
+                <Td>{worker.sid}</Td>
+                <Td textAlign='right'>
+                  <DeleteIconWrapper onClick={handleOpen}>
+                    <DeleteIcon decorative={false} title='Delete Agent' />
+                  </DeleteIconWrapper>
+                  <AlertDialog
+                    heading='Delete Agent?'
+                    isOpen={isOpen}
+                    onConfirm={handleDelete}
+                    onConfirmLabel='Submit'
+                    onDismiss={handleClose}
+                    onDismissLabel='Cancel'
+                  >
+                    Are you sure you want to delete this agent?
+                  </AlertDialog>
+                </Td>
+              </Tr>
+            ))
           ) : (
             <Tr>
               <Th scope='row'>
