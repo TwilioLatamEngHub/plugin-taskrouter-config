@@ -3,15 +3,15 @@ import { Modal, ModalBody, Table, TBody, Td, Th, Tr } from '@twilio-paste/core'
 
 import { ModalCreateWorkerProps, modalHeadingID } from './ModalCreateWorker'
 
-type ModalJSONWorkerProps = Omit<ModalCreateWorkerProps, 'setWorkers'> & {
+type ModalInfoWorkerProps = Omit<ModalCreateWorkerProps, 'setWorkers'> & {
   worker: any
 }
 
-export const ModalJSONWorker = ({
+export const ModalInfoWorker = ({
   isOpen,
   setIsOpen,
   worker
-}: ModalJSONWorkerProps): JSX.Element => {
+}: ModalInfoWorkerProps): JSX.Element => {
   const handleClose = () => setIsOpen(false)
   const keys = Object.keys(worker).filter(k => k !== 'links' && k !== 'url')
 

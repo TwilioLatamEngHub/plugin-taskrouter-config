@@ -20,7 +20,7 @@ import { ButtonCreateWorker } from './ButtonCreateWorker'
 import { TaskRouterConfigContext, WorkersConfigContext } from '../../contexts'
 import { deleteWorker, fetchWorkers, fetchWorkspace } from '../../services'
 import { ModalUpdateWorker } from './ModalUpdateWorker'
-import { ModalJSONWorker } from './ModalJSONWorker'
+import { ModalInfoWorker } from './ModalInfoWorker'
 
 const IconWrapper = styled.div`
   display: flex;
@@ -35,7 +35,7 @@ export const Workers = (): JSX.Element => {
   const [workers, setWorkers] = useState<any[]>([])
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false)
   const [isWorkerModalOpen, setIsWorkerModalOpen] = useState<boolean>(false)
-  const [isJSONModalOpen, setIsJSONModalOpen] = useState<boolean>(false)
+  const [isModalInfoWorker, setIsModalInfoWorkerOpen] = useState<boolean>(false)
 
   useEffect(() => {
     const getWorkspace = async () => {
@@ -69,8 +69,8 @@ export const Workers = (): JSX.Element => {
     handleFetchWorkers()
   }, [])
 
-  const handleJSON = (sid: string) => {
-    setIsJSONModalOpen(true)
+  const handleInfo = (sid: string) => {
+    setIsModalInfoWorkerOpen(true)
     const clickedWorker = workers.find(w => w.sid === sid)
     setWorker(clickedWorker)
   }
@@ -116,7 +116,7 @@ export const Workers = (): JSX.Element => {
           <Tr>
             <Th>Agent</Th>
             <Th>SID</Th>
-            <Th textAlign='center'>JSON</Th>
+            <Th textAlign='center'>Info</Th>
             <Th textAlign='center'>Edit</Th>
             <Th textAlign='center'>Delete</Th>
           </Tr>
@@ -129,7 +129,7 @@ export const Workers = (): JSX.Element => {
                   <Th scope='row'>{worker.friendlyName}</Th>
                   <Td>{worker.sid}</Td>
                   <Td textAlign='right'>
-                    <IconWrapper onClick={() => handleJSON(worker.sid)}>
+                    <IconWrapper onClick={() => handleInfo(worker.sid)}>
                       <FileIcon decorative={false} title='Worker Details' />
                     </IconWrapper>
                   </Td>
@@ -161,9 +161,9 @@ export const Workers = (): JSX.Element => {
                 setWorkers={setWorkers}
                 worker={worker}
               />
-              <ModalJSONWorker
-                isOpen={isJSONModalOpen}
-                setIsOpen={setIsJSONModalOpen}
+              <ModalInfoWorker
+                isOpen={isModalInfoWorker}
+                setIsOpen={setIsModalInfoWorkerOpen}
                 worker={worker}
               />
             </>
